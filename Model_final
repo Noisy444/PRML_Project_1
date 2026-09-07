@@ -1,0 +1,44 @@
+# Import libraries for working with Fashion-MNIST dataset, displaying images, and numerical operations 
+from tensorflow.keras.datasets import fashion_mnist
+import matplotlib.pyplot as plt
+# Import scikit-learn libraries for model evaluation and training
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import accuracy_score, classification_report, confusion_matrix, ConfusionMatrixDisplay
+# Import library for saving and loading models
+import joblib
+
+# Loading the training, testing data and selecting the target variables
+(x_train, y_train), (x_test, y_test) = fashion_mnist.load_data()
+
+# Converting image values to floating-point numbers
+x_train = x_train.astype("float32") / 255.0
+x_test = x_test.astype("float32") / 255.0
+# Flattening 28x28 images into 1D arrays of 784 features 
+x_train_flat = x_train.reshape(x_train.shape[0], -1)
+x_test_flat = x_test.reshape(x_test.shape[0], -1)
+
+# Names of the ten classes
+classes = ["T-shirt/top","Trouser","Pullover","Dress","Coat","Sandal","Shirt","Sneaker","Bag","Ankle boot"]
+
+# Split the training data into training and validation sets
+x_train_flat, x_val_flat, y_train, y_val = train_test_split(x_train_flat, y_train, test_size=0.2, random_state=42)
+
+# Initialising the logistic regression classifier
+model_2 = LogisticRegression(penalty="l2",C=0.1,solver="lbfgs",max_iter=1000,random_state=42)
+
+# Training the logistic regression model on the training data
+model_2.fit(x_train_flat, y_train)
+
+#saving model
+joblib.dump(model_2, "model_2.pkl")
+
+# Loading the saved model
+model_2_loaded = joblib.load("model_2.pkl")
+
+# Test predictions using the loaded model
+y_test_pred_loaded = model_2_loaded.predict(x_test_flat)
+
+# Test accuracy for the loaded model
+test_accuracy_loaded = accuracy_score(y_test, y_test_pred_loaded)
+print("Test Accuracy for the loaded model:", test_accuracy_loaded)
