@@ -18,6 +18,10 @@ print(x_test.shape)
 x_train = x_train.astype("float32") / 255.0
 x_test = x_test.astype("float32") / 255.0
 
+# Flatten the 28x28 images into 1D arrays of 784 features 
+x_train_flat = x_train.reshape(x_train.shape[0], -1)
+x_test_flat = x_test.reshape(x_test.shape[0], -1)
+
 # Define names of the ten clothing categories
 classes = [
     "T-shirt/top",

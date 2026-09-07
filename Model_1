@@ -1,0 +1,95 @@
+# Import libraries for working with Fashion-MNIST dataset, displaying images, and numerical operations 
+from tensorflow.keras.datasets import fashion_mnist
+import matplotlib.pyplot as plt
+import numpy as np
+# Import scikit-learn libraries for model evaluation and training
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import accuracy_score, classification_report, confusion_matrix, ConfusionMatrixDisplay
+
+# Loading the training, testing data and selecting the target variables
+(x_train, y_train), (x_test, y_test) = fashion_mnist.load_data()
+
+# Converting image values to floating-point numbers
+x_train = x_train.astype("float32") / 255.0
+x_test = x_test.astype("float32") / 255.0
+# Flattening 28x28 images into 1D arrays of 784 features 
+x_train_flat = x_train.reshape(x_train.shape[0], -1)
+x_test_flat = x_test.reshape(x_test.shape[0], -1)
+
+# Names of the ten classes
+classes = ["T-shirt/top","Trouser","Pullover","Dress","Coat","Sandal","Shirt","Sneaker","Bag","Ankle boot"]
+
+# Split the training data into training and validation sets
+x_train_flat, x_val_flat, y_train, y_val = train_test_split(x_train_flat, y_train, test_size=0.2, random_state=42)
+
+# Initialising the logistic regression classifier
+model = LogisticRegression(max_iter=1000)
+
+# Training model on the training data
+model.fit(x_train_flat, y_train)
+model_2.fit(x_train_flat, y_train)
+
+# Validation predictions
+y_val_pred = model.predict(x_val_flat)
+# Testing predictions
+y_test_pred = model.predict(x_test_flat)
+# Validation accuracy
+val_accuracy = accuracy_score(y_val, y_val_pred)
+# Test accuracy
+test_accuracy = accuracy_score(y_test, y_test_pred)
+
+# Test F1 score
+test_report_dict = classification_report(y_test,y_test_pred,target_names=classes,output_dict=True)
+# Extracting the weighted average F1 score from the test classification report
+test_f1_score = test_report_dict["weighted avg"]["f1-score"]
+# Validation classification report
+val_report = classification_report(y_val,y_val_pred,target_names=classes)
+# Test classification report
+test_report = classification_report(y_test,y_test_pred,target_names=classes)
+
+# Display evaluation results
+print("MODEL EVALUATION RESULTS")
+# Displaying validation results
+print("\nVALIDATION RESULTS")
+print("Validation Accuracy:", val_accuracy)
+# Displaying test results
+print("\nTEST RESULTS")
+print("Test Accuracy:", test_accuracy)
+print("Test F1 Score:", test_f1_score)
+# Displaying test classification report
+print("\nTest Classification Report:")
+print(test_report)
+# Displaying validation classification report
+print("\nVALIDATION RESULTS")
+print("Validation Accuracy:", val_accuracy)
+# Displaying validation classification report
+print("\nValidation Classification Report:")
+print(val_report)
+
+# Create confusion matrix for validation set
+val_cm = confusion_matrix(y_val, y_val_pred)
+ConfusionMatrixDisplay(val_cm, display_labels=classes).plot()
+# Create confusion matrix for test set
+test_cm = confusion_matrix(y_test, y_test_pred)
+ConfusionMatrixDisplay(test_cm, display_labels=classes).plot()
+# Displaying confusion matrices for both validation and test sets
+plt.show()
+
+# Correct predictions examples
+correct_indices = np.where(y_test == y_test_pred)[0]
+for i in range(3):
+    index = correct_indices[i]
+    plt.imshow(x_test[index], cmap='gray')
+    plt.title(f"Predicted: {classes[y_test_pred[index]]}, Actual: {classes[y_test[index]]}")
+    plt.show()
+plt.close()
+
+# Misclassified predictions examples
+misclassified_indices = np.where(y_test != y_test_pred)[0]
+for i in range(3):
+    index = misclassified_indices[i]
+    plt.imshow(x_test[index], cmap='gray')
+    plt.title(f"Predicted: {classes[y_test_pred[index]]}, Actual: {classes[y_test[index]]}")
+    plt.show()
+plt.close()
