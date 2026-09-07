@@ -28,7 +28,6 @@ model = LogisticRegression(max_iter=1000)
 
 # Training model on the training data
 model.fit(x_train_flat, y_train)
-model_2.fit(x_train_flat, y_train)
 
 # Validation predictions
 y_val_pred = model.predict(x_val_flat)

@@ -30,7 +30,7 @@ model_2 = LogisticRegression(penalty="l2",C=0.1,solver="lbfgs",max_iter=1000,ran
 # Training the logistic regression model on the training data
 model_2.fit(x_train_flat, y_train)
 
-#saving model
+# Saving model
 joblib.dump(model_2, "model_2.pkl")
 
 # Loading the saved model
