@@ -1,10 +1,12 @@
 # Import libraries for working with Fashion-MNIST dataset, displaying images, and numerical operations 
+import numpy as np
 from tensorflow.keras.datasets import fashion_mnist
 import matplotlib.pyplot as plt
 # Import scikit-learn libraries for model evaluation and training
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score, classification_report, confusion_matrix, ConfusionMatrixDisplay
+from sklearn.model_selection import cross_val_score
 # Import library for saving and loading models
 import joblib
 
@@ -25,13 +27,13 @@ classes = ["T-shirt/top","Trouser","Pullover","Dress","Coat","Sandal","Shirt","S
 x_train_flat, x_val_flat, y_train, y_val = train_test_split(x_train_flat, y_train, test_size=0.2, random_state=42)
 
 # Initialising the logistic regression classifier
-model_2 = LogisticRegression(penalty="l2",C=0.1,solver="lbfgs",max_iter=1000,random_state=42)
+#model_2 = LogisticRegression(penalty="l2",C=0.1,solver="lbfgs",max_iter=1000,random_state=42)
 
 # Training the logistic regression model on the training data
-model_2.fit(x_train_flat, y_train)
+#model_2.fit(x_train_flat, y_train)
 
 # Saving model
-joblib.dump(model_2, "model_2.pkl")
+#joblib.dump(model_2, "model_2.pkl")
 
 # Loading the saved model
 model_2_loaded = joblib.load("model_2.pkl")
@@ -42,3 +44,8 @@ y_test_pred_loaded = model_2_loaded.predict(x_test_flat)
 # Test accuracy for the loaded model
 test_accuracy_loaded = accuracy_score(y_test, y_test_pred_loaded)
 print("Test Accuracy for the loaded model:", test_accuracy_loaded)
+
+# Cross validation for the loaded model
+cv_scores_loaded = cross_val_score(model_2_loaded, x_train_flat, y_train, cv=5)
+print("Cross Validation Scores for the loaded model:", cv_scores_loaded)
+print("Mean Cross Validation Score for the loaded model:", np.mean(cv_scores_loaded))
