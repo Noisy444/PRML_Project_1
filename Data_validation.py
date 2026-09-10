@@ -51,7 +51,7 @@ plt.show()
 # Set NumPy print options for better readability of floating-point numbers
 np.set_printoptions(precision=3, floatmode='fixed')
 
-# Display the pixel matrix of the first image
+# Display the pixel matrix of the third image
 print(x_train[2])
 print(x_train[2][:5, :10])
 
